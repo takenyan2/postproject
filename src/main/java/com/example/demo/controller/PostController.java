@@ -23,6 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.entiteis.Post;
 import com.example.demo.services.PostService;
 
+
+/**
+ * JsonやXML等を返すWebAPI用のコントローラ(戻り値がレスポンスのコンテンツになりViewに遷移しない)
+ */
 @RestController
 public class PostController {
     private final PostService postService;
