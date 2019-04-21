@@ -72,7 +72,7 @@ public class PostService {
     }
 
     //画像アップロード
-    public Post createImage(Long id, MultipartFile multipartFile)throws IOException {
+    public Post uploadImage(Long id, MultipartFile multipartFile)throws IOException {
         Optional<Post> originalPost = postRepository.findById(id);
         Post updateImage = originalPost.orElseThrow(NotFoundException::new);
         //画像のファイル名を作成するために、日付を取得。
@@ -97,11 +97,14 @@ public class PostService {
 
     }
     //画像削除
-    public void daleteImage(Post post){
+    public void deleteImage(Post post){
         File deletepath = new File("src/main/resource/static" +(post.getImage().substring(22)));
         deletepath.delete();
+    }
 
-
+    //検索
+    public List<Post> search(String keyword){
+        return postRepository.findByContent(keyword);
     }
 
 }
