@@ -67,14 +67,14 @@ public class PostController {
     //投稿削除
     @DeleteMapping("post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable Long id){
+    public void deletePost(@PathVariable("id") Long id){
         postService.delete(id);
     }
 
     //画像ファイルアップロード
     @PostMapping("imageUpload/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post postImage(@PathVariable Long id,@RequestParam("image") MultipartFile multipartFile)throws IOException {
+    public Post postImage(@PathVariable("id") Long id,@RequestParam("image") MultipartFile multipartFile)throws IOException {
         if(multipartFile.isEmpty()){
             throw new MultipartException("画像が未選択です");
         }
@@ -82,9 +82,9 @@ public class PostController {
     }
 
     //投稿を検索
-    @GetMapping("search")
+    @GetMapping("posts/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<Post> searchPost(String keyword){
+    public List<Post> searchPost(@RequestParam("keyword") String keyword){
         return postService.search(keyword);
     }
 

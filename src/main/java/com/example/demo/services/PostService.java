@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,8 +30,8 @@ public class PostService {
     private final PostRepository postRepository;
     @Value("{imagesPath}")
     private String imagesPath;
-    @Value("{imagesDirectory}")
-    private String imagesDirectory;
+//    @Value("{imagesDirectory}")
+//    private String imagesDirectory;
 
 
     @Autowired
@@ -50,9 +51,9 @@ public class PostService {
 
     //新規投稿
     public Post create(Post post){
-        Post createpost = new Post();
-        createpost.setContent(post.getContent());
-        return postRepository.save(createpost);
+        Post createPost = new Post();
+        createPost.setContent(post.getContent());
+        return postRepository.save(createPost);
     }
 
     //投稿更新
@@ -85,21 +86,29 @@ public class PostService {
 
         //画像保存用のディレクトリとファイルを作成。最後にさっき取得した拡張子を追加することを忘れない。
         String renameFile = id + "-" + timeNow.format(dateTimeFormatter) + extension;
-        File uploadFile = new File(imagesDirectory + "/" + renameFile);
+        File uploadFile = new File( "src/main/resources/static/images" + "/" + renameFile);
+        FileOutputStream fos = new FileOutputStream(uploadFile);
+
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fos);
 
         //新たな画像ファイルをバイナリーデータへ書き込む。
         try (BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile))) {
             bo.write(multipartFile.getBytes());
         }
+        if (updateImage.getImage() !=null){
+            deleteImage(updateImage);
+        }
+
         String imageURL = imagesPath + "/" + renameFile;
         updateImage.setImage(imageURL);
         return postRepository.save(updateImage);
-
     }
+
     //画像削除
     public void deleteImage(Post post){
-        File deletepath = new File("src/main/resource/static" +(post.getImage().substring(22)));
-        deletepath.delete();
+        File deletePath = new File("src/main/resource/static" +(post.getImage().substring(22)));
+        deletePath.delete();
+        postRepository.save(post);
     }
 
     //検索
