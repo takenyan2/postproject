@@ -1,0 +1,175 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "RESTfulpost API"
+
+host: localhost:8080
+schemes:
+  - http
+
+paths:
+  /posts:
+    get:
+      tags:
+        - post
+      summary: "商品データ全件参照"
+      description: "商品の一覧を参照できます"
+
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        400:
+          description: "Bad Request"
+        500:
+          description: "Internal Server Error"
+
+    post:
+      tags:
+        - post
+      summary: "新規商品登録"
+      description: "新しい商品の登録ができます"
+      parameters:
+        - name: post
+          in: body
+          description: product info
+          required: true
+          schema:
+            $ref: "#/definitions/post"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        400:
+          description: "Bad Request"
+
+  /post/{id}:
+    get:
+      tags:
+        - post
+      summary: "idを元に商品データを1件参照"
+      description: "指定した商品のデータを参照できます"
+      parameters:
+        - in: path
+          name: id
+          description: "商品データのidを返す"
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        404:
+          description: "NotFound"
+        500:
+          description: "Internal Server Error"
+
+    put:
+      tags:
+        - post
+      summary: "idを元に商品データを1件変更"
+      parameters:
+        - in: path
+          name: id
+          description: "商品データ変更のためのid"
+          required: true
+          type: integer
+        - name: post
+          in: body
+          description: "更新時にも商品に値をセットすることが可能"
+          schema:
+            $ref: "#/definitions/post"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        400:
+          description: "Bad Request"
+        404:
+          description: "NotFound"
+        500:
+          description: "Internal Server Error"
+
+    delete:
+      tags:
+        - post
+      summary: "idを元に商品データを1件削除"
+      parameters:
+        - in: path
+          name: id
+          description: "商品データ削除のためのid"
+          required: true
+          type: integer
+      responses:
+        404:
+          description: "NotFound"
+        500:
+          description: "Internal Server Error"
+
+  /posts/imageUpload/{id}:
+    post:
+      tags:
+        - post
+      summary: "idで指定した商品に画像データをアップロード"
+      consumes:
+        - multipart/form-data
+      description: "商品画像を登録します"
+      parameters:
+        - in: path
+          name: id
+          description: "商品データ指定のためのid"
+          required: true
+          type: integer
+        - in: body
+          name: image
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        400:
+          description: "Bad Request"
+        404:
+          description: "NotFound"
+        500:
+          description: "Internal Server Error"
+
+  /posts/search:
+    get:
+      tags:
+        - post
+      summary: "商品データ検索"
+      parameters:
+        - in: query
+          name: keyword
+          description: "検索ワード"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          schema:
+            $ref: "#/definitions/post"
+        404:
+          description: "NotFound"
+        500:
+          description: "Internal Server Error"
+
+definitions:
+  post:
+    type: object
+    properties:
+      id:
+        type: integer
+      image:
+        type: string
+      content:
+        type: string
+        maxLength: 500
