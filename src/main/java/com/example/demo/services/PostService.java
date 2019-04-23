@@ -30,8 +30,8 @@ public class PostService {
     private final PostRepository postRepository;
     @Value("{imagesPath}")
     private String imagesPath;
-//    @Value("{imagesDirectory}")
-//    private String imagesDirectory;
+    //@Value("{imagesDirectory}")
+    //private String imagesDirectory;
 
 
     @Autowired

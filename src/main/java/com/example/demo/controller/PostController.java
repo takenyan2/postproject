@@ -37,35 +37,35 @@ public class PostController {
     }
 
     //投稿一覧表示
-    @GetMapping("post")
+    @GetMapping("posts")
     @ResponseStatus(HttpStatus.OK)
     public List<Post> getPosts(){
         return postService.findAll();
     }
 
     //投稿一件参照
-    @GetMapping("post/{id}")
+    @GetMapping("posts/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Post getPost(@PathVariable Long id){
         return postService.findById(id);
     }
 
     //新規投稿
-    @PostMapping("post")
+    @PostMapping("posts")
     @ResponseStatus(HttpStatus.CREATED)
     public Post createPost(@RequestBody @Validated Post post){
         return postService.create(post);
     }
 
     //投稿更新
-    @PutMapping("post/{id}")
+    @PutMapping("posts/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Post updatePost(@PathVariable Long id, @RequestBody @Validated Post post){
         return postService.update(id, post);
     }
 
     //投稿削除
-    @DeleteMapping("post/{id}")
+    @DeleteMapping("posts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("id") Long id){
         postService.delete(id);
