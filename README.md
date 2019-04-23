@@ -31,21 +31,18 @@ Post
 - main
     - java
         - com/example/restapi
-            - config
-                - JpaAuditorAwareConfig
-                - WebMvcConfig
             - controllers
-                - interceptors
                 - PostController.java
             - entities
                 - Post.java
             - exception
                 - NotFoundException.java
+                - PostExceptionHandler
             - repositories
                 - PostRepository.java
             - services
                 - PostService.java
-                - RestapiApplication.java
+                - DemoApplication.java
     - resources
         - static/images
             - 1-2019-04-15-16-44-23.jpg
