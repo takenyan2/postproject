@@ -19,12 +19,10 @@ import lombok.Setter;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
-@Getter
-@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @NotNull
     private  String userName;
@@ -45,18 +43,47 @@ public class User {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    /**
-     * トークン有効期限チェック
-     *
-     * @param tokenExpiration 　トークンの有効期限
-     * @return 有効期限切れ(true)
-     */
-    public boolean isExperired(long tokenExpiration) {
-        LocalDateTime tokenCreatedAt = getCreatedAt();
-        LocalDateTime now = LocalDateTime.now();
-        return  tokenCreatedAt.plusMinutes(tokenExpiration).isBefore(now);
-
+    public Long getId(){
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName(){
+        return userName;
+    }
+
+    public void setUserName(String userName){
+        this.userName = userName;
+    }
+
+    public String getAccessToken(){
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken){
+        this.accessToken = accessToken;
+    }
+
+    public String getAppToken(){
+        return appToken;
+    }
+
+    public void setAppToken(String appToken){
+        this.appToken = appToken;
+    }
+
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
+    }
+
+
 
 }
 

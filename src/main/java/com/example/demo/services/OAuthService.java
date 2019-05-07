@@ -81,7 +81,7 @@ public class OAuthService {
      *
      * @param accessToken 　アクセストークン
      */
-    public void createUser(String accessToken, String appToken){
+    public void createUser(String accessToken, String appToken) {
         GitHubUserProfile userProfile = getGitHubUserProfile(accessToken);
         User user = new User();
         user.setUserName(userProfile.getUsername());

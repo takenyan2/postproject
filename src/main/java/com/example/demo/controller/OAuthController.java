@@ -46,11 +46,11 @@ public class OAuthController {
 
     @GetMapping("github/getcode")
     public String getCode(HttpSession session){
-        if(session.getAttribute(login) == null){
+        if(session.getAttribute(login) != null){
             return "redirect:/home";
         }
         String url = oAuthService.getGitHubConnectionUrl();
-            return "redirect:" + url;
+        return "redirect:" + url;
     }
 
     /**
@@ -72,10 +72,10 @@ public class OAuthController {
         if (accessToken == null){
             return "error/401";
         }
-        String appToken = UUID.randomUUID().toString();
-        oAuthService.createUser(accessToken,appToken);
-        session.setAttribute(login, accessToken);
-        return "redirect:home";
+        String appToken = UUID.randomUUID().toString();//文字列をランダムにappTokenに格納
+        oAuthService.createUser(accessToken,appToken);//accessTokenとappTokenを使ってuserのcreateを行う。
+        session.setAttribute(login, accessToken);//session.setAttributeでsessionに、loginしているユーザーの情報を保存。
+        return "redirect:/home";//homeにリダイレクト↓
     }
 
 
@@ -100,14 +100,15 @@ public class OAuthController {
      * @param session 　HttpSession
      * @return ログイン(Top)画面
      */
-    @GetMapping("logout")
+    @GetMapping("github/logout")
     public String logout(HttpSession session){
         if (session.getAttribute(login) == null){
             return "error/401";
         }
-        String acccessToken = session.getAttribute(login).toString();
-        oAuthService.deleteUser(acccessToken);
+        String accessToken = session.getAttribute(login).toString();
+        oAuthService.deleteUser(accessToken);
         session.invalidate();
         return "redirect:/";
+
     }
 }
