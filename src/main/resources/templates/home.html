@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>トップ(ログイン)画面</title>
+    <title>Home</title>
 </head>
 <body>
-<a href="github/getcode"></a>
+<h2>ホーム画面</h2>
+<div>
+    <p th:text="|名前: ${user.userName}|"></p>
+    <p th:text="|トークン: ${user.appToken}|"></p>
+    <img th:src="'https://avatars.githubusercontent.com/' + *{userProfile.username}"/>
+</div>
+
+<a th:href="@{github/logout}">ログアウト</a>
 </body>
 </html>
+
