@@ -109,6 +109,6 @@ public class OAuthController {
         oAuthService.deleteUser(accessToken);
         session.invalidate();
         return "redirect:/";
-
     }
+
 }

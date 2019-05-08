@@ -33,6 +33,23 @@ public class PostExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(e,error500,null,HttpStatus.BAD_REQUEST,request);
     }
 
+
+    /**
+     * トークン認証失敗時のハンドリング(401)
+     * 不正トークン、トークンと一致するユーザーなし
+     *
+     * @param e       UnauthorizedExceptionにthrowされたエラー
+     * @param request 現在のリクエスト
+     * @return エラーレスポンスデータを返却
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public  ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException e,WebRequest request){
+        Map<String, String> errorMessages = new HashMap<>();
+        errorMessages.put("messages","トークンが正しくありません 再度ログインしてください");
+        return super.handleExceptionInternal(e,errorMessages,null,HttpStatus.BAD_REQUEST,request);
+    }
+
+
     //バリデーション発生時のエラークラス
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
