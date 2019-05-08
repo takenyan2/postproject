@@ -46,7 +46,7 @@ public class PostExceptionHandler extends ResponseEntityExceptionHandler {
     public  ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException e,WebRequest request){
         Map<String, String> errorMessages = new HashMap<>();
         errorMessages.put("messages","トークンが正しくありません 再度ログインしてください");
-        return super.handleExceptionInternal(e,errorMessages,null,HttpStatus.BAD_REQUEST,request);
+        return super.handleExceptionInternal(e,errorMessages,null,HttpStatus.UNAUTHORIZED,request);
     }
 
 
