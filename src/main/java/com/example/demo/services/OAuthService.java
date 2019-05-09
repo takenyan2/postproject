@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,8 +116,8 @@ public class OAuthService {
      * @param appToken 　アプリ内で新しく発行したトークン
      * @return 該当するuserを返す
      */
-    public User findUserByAppToken(String appToken){
-        return userRepository.findByAppToken(appToken).orElseThrow(() -> new UnauthorizedException("認証に失敗しました"));
+    public Optional<User> findUserByAppToken(String appToken) {
+        return userRepository.findByAppToken(appToken);
     }
 
     //appTokenがあるか調べて無ければ削除。

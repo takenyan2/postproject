@@ -34,8 +34,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             throw new UnauthorizedException("認証に失敗しました。トークンが確認できません");
         }
 
-        Optional<User> user = Optional.ofNullable(oAuthService.findUserByAppToken(appToken.replaceFirst("Bearer ","")));
-        if (user == null){
+        Optional<User> user = oAuthService.findUserByAppToken(appToken.replaceFirst("Bearer ",""));
+        if (!user.isPresent()){
             throw new UnauthorizedException("認証に失敗しました。トークンが正しくありません");
         }
         return true;
