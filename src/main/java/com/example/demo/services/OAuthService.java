@@ -23,15 +23,18 @@ import com.example.demo.repositories.UserRepository;
 public class OAuthService {
 
     private final UserRepository userRepository;
+
     @Value("${github.clientId}")
     private String clientId;
+
     @Value("${github.clientSecret}")
     private String clientSecret;
+
     @Value("${github.callbackUrl}")
     private String callbackUrl;
 
     @Autowired
-    public OAuthService(UserRepository userRepository){
+    public OAuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -42,11 +45,11 @@ public class OAuthService {
      *
      * @return URLにパラメータとしてcode(認証コード)を渡す
      */
-    public String getGitHubConnectionUrl(){
+    public String getGitHubConnectionUrl() {
         GitHubConnectionFactory connectionFactory = new GitHubConnectionFactory(clientId, clientSecret);
         OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
         OAuth2Parameters params = new OAuth2Parameters();
-        return oauthOperations.buildAuthenticateUrl(GrantType.AUTHORIZATION_CODE,params);
+        return oauthOperations.buildAuthenticateUrl(GrantType.AUTHORIZATION_CODE, params);
     }
 
     /*
@@ -56,12 +59,12 @@ public class OAuthService {
      * @param code 　　認証コード
      * @return accessTokenを含んだaccessGrantを返却
      */
-    public AccessGrant getAccessGrant(String code){
-        GitHubConnectionFactory connectionFactory = new GitHubConnectionFactory(clientId,clientSecret);
+    public AccessGrant getAccessGrant(String code) {
+        GitHubConnectionFactory connectionFactory = new GitHubConnectionFactory(clientId, clientSecret);
         OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
         //exchangeForAccess　codeをaccessGrantに変えるためのメソッド。
         //callbackUrl　で認証したらこのURLに帰ってきてねー！って記述
-        return oauthOperations.exchangeForAccess(code,callbackUrl,null);
+        return oauthOperations.exchangeForAccess(code, callbackUrl, null);
     }
 
     /**
@@ -70,7 +73,7 @@ public class OAuthService {
      * @param accessToken 　アクセストークン
      * @return 認証ユーザーに関する基本的なプロファイル情報
      */
-    public GitHubUserProfile getGitHubUserProfile(String accessToken){
+    public GitHubUserProfile getGitHubUserProfile(String accessToken) {
         GitHub github = new GitHubTemplate(accessToken);
         return github.userOperations().getUserProfile();
     }
@@ -101,12 +104,12 @@ public class OAuthService {
      */
 
     //ユーザーのaccesTokenを見つけてくる記述。なかったら認証失敗のエラーを投げる。
-    public User findUserByAccessToken(String accessToken){
+    public User findUserByAccessToken(String accessToken) {
         return userRepository.findByAccessToken(accessToken).orElseThrow(() -> new UnauthorizedException("認証に失敗しました"));
     }
 
     //accessTokenがあるか調べて無ければ削除。
-    public void deleteUser(String accessToken){
+    public void deleteUser(String accessToken) {
         userRepository.findByAccessToken(accessToken).ifPresent(userRepository::delete);
     }
 
@@ -122,7 +125,7 @@ public class OAuthService {
     }
 
     //appTokenがあるか調べて無ければ削除。
-    public void deleteUserByAppToken(String appToken){
+    public void deleteUserByAppToken(String appToken) {
         userRepository.findByAppToken(appToken).ifPresent(userRepository::delete);
     }
 

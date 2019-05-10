@@ -14,16 +14,16 @@ public class OAuthExceptionHandler extends ResponseEntityExceptionHandler {
 
     //「認証してから出直してこいよ」ってエラー。(401)
     @org.springframework.web.bind.annotation.ExceptionHandler(HttpClientErrorException.class)
-    public String httpClientErrorException(HttpClientErrorException e){
-        logger.error(e.getMessage(),e);
+    public String httpClientErrorException(HttpClientErrorException e) {
+        logger.error(e.getMessage(), e);
         return "error/401";
     }
 
     //その他エラーをキャッチ(500)
     @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String allException(Exception e){
-        logger.error(e.getMessage(),e);
+    public String allException(Exception e) {
+        logger.error(e.getMessage(), e);
         return "error/500";
     }
 

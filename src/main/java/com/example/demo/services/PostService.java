@@ -28,6 +28,7 @@ import javafx.geometry.Pos;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+
     @Value("{imagesPath}")
     private String imagesPath;
     //@Value("{imagesDirectory}")
@@ -35,29 +36,29 @@ public class PostService {
 
 
     @Autowired
-    public PostService(PostRepository postRepository){
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
     //投稿内容全件取得
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return postRepository.findAll();
     }
 
     //投稿データ1件取得
-    public Post findById(Long id){
+    public Post findById(Long id) {
         return postRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     //新規投稿
-    public Post create(Post post){
+    public Post create(Post post) {
         Post createPost = new Post();
         createPost.setContent(post.getContent());
         return postRepository.save(createPost);
     }
 
     //投稿更新
-    public Post update(Long id,Post post){
+    public Post update(Long id, Post post) {
         Optional<Post> pastPost = postRepository.findById(id);
         Post updatePost = pastPost.orElseThrow(NotFoundException::new);
         updatePost.setContent(post.getContent());
@@ -65,7 +66,7 @@ public class PostService {
     }
 
     //投稿削除
-    public void delete(Long id){
+    public void delete(Long id) {
         Optional<Post> pastPost = postRepository.findById(id);
         Post deletePost = pastPost.orElseThrow(NotFoundException::new);
 
@@ -73,7 +74,7 @@ public class PostService {
     }
 
     //画像アップロード
-    public Post uploadImage(Long id, MultipartFile multipartFile)throws IOException {
+    public Post uploadImage(Long id, MultipartFile multipartFile) throws IOException {
         Optional<Post> originalPost = postRepository.findById(id);
         Post updateImage = originalPost.orElseThrow(NotFoundException::new);
         //画像のファイル名を作成するために、日付を取得。
@@ -86,7 +87,7 @@ public class PostService {
 
         //画像保存用のディレクトリとファイルを作成。最後にさっき取得した拡張子を追加することを忘れない。
         String renameFile = id + "-" + timeNow.format(dateTimeFormatter) + extension;
-        File uploadFile = new File( "src/main/resources/static/images" + "/" + renameFile);
+        File uploadFile = new File("src/main/resources/static/images" + "/" + renameFile);
         FileOutputStream fos = new FileOutputStream(uploadFile);
 
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fos);
@@ -95,7 +96,7 @@ public class PostService {
         try (BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile))) {
             bo.write(multipartFile.getBytes());
         }
-        if (updateImage.getImage() !=null){
+        if (updateImage.getImage() != null) {
             deleteImage(updateImage);
         }
 
@@ -105,14 +106,14 @@ public class PostService {
     }
 
     //画像削除
-    public void deleteImage(Post post){
-        File deletePath = new File("src/main/resource/static" +(post.getImage().substring(22)));
+    public void deleteImage(Post post) {
+        File deletePath = new File("src/main/resource/static" + (post.getImage().substring(22)));
         deletePath.delete();
         postRepository.save(post);
     }
 
     //検索
-    public List<Post> search(String keyword){
+    public List<Post> search(String keyword) {
         return postRepository.findByContent(keyword);
     }
 

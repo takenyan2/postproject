@@ -26,16 +26,16 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     @Override
     //　HandlerInterceptorAdapterクラスをOverrideさせるときは、型が決まっていて、boolean型の時は
     // (HttpServletRequest request, HttpServletResponse response, Object handler)を引数に持たせる。
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object handler){
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //フィルタは、リクエストヘッダーへのアクセスを利用して、リクエストがターゲットリソースに送信される前にユーザーに承認が与えられているかどうかを調べる。
         // request.getHeaderはヘッダを取得する記述。Authorizationは、承認ヘッダーを調べるフィルタの設定方法。
         String appToken = request.getHeader(authorization);
-        if (appToken == null){
+        if (appToken == null) {
             throw new UnauthorizedException("認証に失敗しました。トークンが確認できません");
         }
 
-        Optional<User> user = oAuthService.findUserByAppToken(appToken.replaceFirst("Bearer ",""));
-        if (!user.isPresent()){
+        Optional<User> user = oAuthService.findUserByAppToken(appToken.replaceFirst("Bearer ", ""));
+        if (!user.isPresent()) {
             throw new UnauthorizedException("認証に失敗しました。トークンが正しくありません");
         }
         return true;

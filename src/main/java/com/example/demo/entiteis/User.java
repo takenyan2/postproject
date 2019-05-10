@@ -24,7 +24,7 @@ public class User {
     private Long id;
 
     @NotNull
-    private  String userName;
+    private String userName;
 
     /**
      * GitHub Providerから取得したアクセストークン
@@ -42,7 +42,7 @@ public class User {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
@@ -50,38 +50,37 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName){
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public String getAccessToken(){
+    public String getAccessToken() {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken){
+    public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public String getAppToken(){
+    public String getAppToken() {
         return appToken;
     }
 
-    public void setAppToken(String appToken){
+    public void setAppToken(String appToken) {
         this.appToken = appToken;
     }
 
-    public LocalDateTime getCreatedAt(){
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt){
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
 
 
 }

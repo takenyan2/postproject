@@ -32,50 +32,50 @@ public class PostController {
     private final PostService postService;
 
     @Autowired
-    public PostController(PostService postService){
+    public PostController(PostService postService) {
         this.postService = postService;
     }
 
     //投稿一覧表示
     @GetMapping("posts")
     @ResponseStatus(HttpStatus.OK)
-    public List<Post> getPosts(){
+    public List<Post> getPosts() {
         return postService.findAll();
     }
 
     //投稿一件参照
     @GetMapping("posts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post getPost(@PathVariable Long id){
+    public Post getPost(@PathVariable Long id) {
         return postService.findById(id);
     }
 
     //新規投稿
     @PostMapping("posts")
     @ResponseStatus(HttpStatus.CREATED)
-    public Post createPost(@RequestBody @Validated Post post){
+    public Post createPost(@RequestBody @Validated Post post) {
         return postService.create(post);
     }
 
     //投稿更新
     @PutMapping("posts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post updatePost(@PathVariable Long id, @RequestBody @Validated Post post){
+    public Post updatePost(@PathVariable Long id, @RequestBody @Validated Post post) {
         return postService.update(id, post);
     }
 
     //投稿削除
     @DeleteMapping("posts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable("id") Long id){
+    public void deletePost(@PathVariable("id") Long id) {
         postService.delete(id);
     }
 
     //画像ファイルアップロード
     @PostMapping("imageUpload/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post postImage(@PathVariable("id") Long id,@RequestParam("image") MultipartFile multipartFile)throws IOException {
-        if(multipartFile.isEmpty()){
+    public Post postImage(@PathVariable("id") Long id, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        if (multipartFile.isEmpty()) {
             throw new MultipartException("画像が未選択です");
         }
         return postService.uploadImage(id, multipartFile);
@@ -84,7 +84,7 @@ public class PostController {
     //投稿を検索
     @GetMapping("posts/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<Post> searchPost(@RequestParam("keyword") String keyword){
+    public List<Post> searchPost(@RequestParam("keyword") String keyword) {
         return postService.search(keyword);
     }
 

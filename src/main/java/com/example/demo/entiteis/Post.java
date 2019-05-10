@@ -19,38 +19,37 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
-    @Size(max = 140,message = "140文字以内で入力してください")
+    @Size(max = 140, message = "140文字以内で入力してください")
     @NotNull(message = "文章が未入力です")
     private String content;
 
     private String image;
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getContent(){
+    public String getContent() {
         return content;
     }
 
-    public void setContent(String content){
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public String getImage(){
+    public String getImage() {
         return image;
     }
 
-    public void setImage(String image){
+    public void setImage(String image) {
         this.image = image;
     }
-
 
 
 }

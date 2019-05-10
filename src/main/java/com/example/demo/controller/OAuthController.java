@@ -22,7 +22,7 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     @Autowired
-    public OAuthController(OAuthService oAuthService){
+    public OAuthController(OAuthService oAuthService) {
         this.oAuthService = oAuthService;
     }
 
@@ -30,7 +30,7 @@ public class OAuthController {
     private String login;
 
     @GetMapping("/")
-    public String top(){
+    public String top() {
         return "top";
     }
 
@@ -45,8 +45,8 @@ public class OAuthController {
      */
 
     @GetMapping("github/getcode")
-    public String getCode(HttpSession session){
-        if(session.getAttribute(login) != null){
+    public String getCode(HttpSession session) {
+        if (session.getAttribute(login) != null) {
             return "redirect:/home";
         }
         String url = oAuthService.getGitHubConnectionUrl();
@@ -63,17 +63,17 @@ public class OAuthController {
      */
 
     @GetMapping("github/gettoken")
-    public String getToken(HttpSession session,@RequestParam String code){
-        if(code == null){
+    public String getToken(HttpSession session, @RequestParam String code) {
+        if (code == null) {
             return "error/401";
         }
         AccessGrant accessGrant = oAuthService.getAccessGrant(code);
         String accessToken = accessGrant.getAccessToken();
-        if (accessToken == null){
+        if (accessToken == null) {
             return "error/401";
         }
         String appToken = UUID.randomUUID().toString();//文字列をランダムにappTokenに格納
-        oAuthService.createUser(accessToken,appToken);//accessTokenとappTokenを使ってuserのcreateを行う。
+        oAuthService.createUser(accessToken, appToken);//accessTokenとappTokenを使ってuserのcreateを行う。
         session.setAttribute(login, accessToken);//session.setAttributeでsessionに、loginしているユーザーの情報を保存。
         return "redirect:/home";//homeにリダイレクト↓
     }
@@ -82,14 +82,14 @@ public class OAuthController {
     //accessTokenを利用してgitのユーザープロフィールから情報を引っ張る。
     //その情報をビューに表示させるためにmodelに格納する。
     @GetMapping("home")
-    public String showHome(HttpSession session, Model model){
-        if(session.getAttribute(login) == null){
+    public String showHome(HttpSession session, Model model) {
+        if (session.getAttribute(login) == null) {
             return "error/401";
         }
         String accessToken = session.getAttribute(login).toString();
         User user = oAuthService.findUserByAccessToken(accessToken);
         GitHubUserProfile userProfile = oAuthService.getGitHubUserProfile(accessToken);
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         model.addAttribute("userProfile", userProfile);
         return "home";
     }
@@ -97,12 +97,13 @@ public class OAuthController {
     /**
      * sessionを破棄してlogOut扱いにする
      * session.invalidate で、セッションを無効にする。
+     *
      * @param session 　HttpSession
      * @return ログイン(Top)画面
      */
     @GetMapping("github/logout")
-    public String logout(HttpSession session){
-        if (session.getAttribute(login) == null){
+    public String logout(HttpSession session) {
+        if (session.getAttribute(login) == null) {
             return "error/401";
         }
         String accessToken = session.getAttribute(login).toString();

@@ -15,14 +15,14 @@ import com.example.demo.controller.AuthInterceptor;
  * WebMvcConfigurerAdapterの@Beanクラスを定義しなければいけない。
  */
 @Configuration
-public class WebMvcConfig  implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
-    public AuthInterceptor authInterceptor(){
+    public AuthInterceptor authInterceptor() {
         return new AuthInterceptor();
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry){
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor()).addPathPatterns("/posts/**");
     }
 
