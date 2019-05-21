@@ -20,7 +20,7 @@ import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.repositories.UserRepository;
 
 @Service
-public class OAuthService {
+public class AuthService {
 
     private final UserRepository userRepository;
 
@@ -34,7 +34,7 @@ public class OAuthService {
     private String callbackUrl;
 
     @Autowired
-    public OAuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -129,5 +129,16 @@ public class OAuthService {
         userRepository.findByAppToken(appToken).ifPresent(userRepository::delete);
     }
 
+    /**
+     * トークン有効期限チェック
+     *
+     * @param tokenExpiration 　トークンの有効期限
+     * @return 有効期限切れ(true)
+     */
+    public boolean isExpired(long tokenExpiration, User user) {
+        LocalDateTime tokenCreatedAt = user.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
+        return tokenCreatedAt.plusMinutes(tokenExpiration).isBefore(now);
+    }
 
 }

@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.example.demo.entiteis.User;
+import com.example.demo.exception.ExpiredTokenException;
 import com.example.demo.exception.UnauthorizedException;
-import com.example.demo.services.OAuthService;
+import com.example.demo.services.AuthService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
     @Autowired
-    OAuthService oAuthService;
+    AuthService authService;
 
     @Value("${auth.status}")
     private String authorization;
@@ -34,10 +35,16 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             throw new UnauthorizedException("認証に失敗しました。トークンが確認できません");
         }
 
-        Optional<User> user = oAuthService.findUserByAppToken(appToken.replaceFirst("Bearer ", ""));
+        Optional<User> user = authService.findUserByAppToken(appToken.replaceFirst("Bearer ", ""));
         if (!user.isPresent()) {
             throw new UnauthorizedException("認証に失敗しました。トークンが正しくありません");
         }
+
+        if (authService.isExpired(tokenExpiration, user.get())){
+            authService.deleteUserByAppToken(appToken);
+            throw new ExpiredTokenException("認証に失敗しました。トークンの有効期限が過ぎています。");
+        }
         return true;
+
     }
 }

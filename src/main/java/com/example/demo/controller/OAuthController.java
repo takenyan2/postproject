@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.UUID;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entiteis.User;
-import com.example.demo.services.OAuthService;
+import com.example.demo.services.AuthService;
 
 @Controller
 public class OAuthController {
-    private final OAuthService oAuthService;
+    private final AuthService authService;
 
     @Autowired
-    public OAuthController(OAuthService oAuthService) {
-        this.oAuthService = oAuthService;
+    public OAuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @Value("${login.status}")
@@ -49,7 +48,7 @@ public class OAuthController {
         if (session.getAttribute(login) != null) {
             return "redirect:/home";
         }
-        String url = oAuthService.getGitHubConnectionUrl();
+        String url = authService.getGitHubConnectionUrl();
         return "redirect:" + url;
     }
 
@@ -67,13 +66,13 @@ public class OAuthController {
         if (code == null) {
             return "error/401";
         }
-        AccessGrant accessGrant = oAuthService.getAccessGrant(code);
+        AccessGrant accessGrant = authService.getAccessGrant(code);
         String accessToken = accessGrant.getAccessToken();
         if (accessToken == null) {
             return "error/401";
         }
         String appToken = UUID.randomUUID().toString();//文字列をランダムにappTokenに格納
-        oAuthService.createUser(accessToken, appToken);//accessTokenとappTokenを使ってuserのcreateを行う。
+        authService.createUser(accessToken, appToken);//accessTokenとappTokenを使ってuserのcreateを行う。
         session.setAttribute(login, accessToken);//session.setAttributeでsessionに、loginしているユーザーの情報を保存。
         return "redirect:/home";//homeにリダイレクト↓
     }
@@ -87,8 +86,8 @@ public class OAuthController {
             return "error/401";
         }
         String accessToken = session.getAttribute(login).toString();
-        User user = oAuthService.findUserByAccessToken(accessToken);
-        GitHubUserProfile userProfile = oAuthService.getGitHubUserProfile(accessToken);
+        User user = authService.findUserByAccessToken(accessToken);
+        GitHubUserProfile userProfile = authService.getGitHubUserProfile(accessToken);
         model.addAttribute("user", user);
         model.addAttribute("userProfile", userProfile);
         return "home";
@@ -107,7 +106,7 @@ public class OAuthController {
             return "error/401";
         }
         String accessToken = session.getAttribute(login).toString();
-        oAuthService.deleteUser(accessToken);
+        authService.deleteUser(accessToken);
         session.invalidate();
         return "redirect:/";
     }
